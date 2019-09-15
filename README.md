@@ -128,6 +128,19 @@ class TestDeregister(unittest.TestCase):
     self.assertEquals()
     
     service.shutdown()
+    _, _, srv = state
+    srv = [s for s in srv if not s[0].startswith('/rosout/') and not s[0].endswith('/get_loggers') and not s[0].endswith('/set_logger_level')]
+    self.failIf(srv, srv)
+    
+    print("Creating service ", SERVICE)
+    service = rospy.Service(SERVICE, EmptySrv, callback)
+    
+    state = master..getSystemState()
+    _, _, srv = state
+    srv = [s for in srv if not s[0].startswith('/rosout/') and not s[0].endswith('/get_loggers') and not s[0].endswith('/set_logger_level')]
+    self.assertEquals(srv, [[rospy.resolve_name(SERVICE), [rospy.get_caller_id()]]])
+    
+    service.shutdown()
     
     time.sleep(1.0)
     
@@ -137,8 +150,8 @@ class TestDeregister(unittest.TestCase):
     self.failIf(srv, srv)
     
 if __name__ == '__main__':
-  rospy.init_node()
-  rotest.run(PKG, '', TestDregister, sys.argv)
+  rospy.init_node('test_dereg', disable_rotime=True)
+  rotest.run(PKG, 'rospy_deregister', TestDregister, sys.argv)
 
 ```
 
